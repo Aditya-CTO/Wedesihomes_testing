@@ -44,7 +44,7 @@ const SignupForm = ({ onClose }) => {
 
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/auth/register`,
+        `${process.env.REACT_APP_API_URL || 'https://wedesihomes-backend.onrender.com/api'}/auth/register`,
         {
           name: formData.name,
           email: formData.email,
