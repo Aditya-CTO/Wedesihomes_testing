@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import React, { useState } from 'react';
 import {
   VStack,
@@ -22,6 +23,11 @@ const SignupForm = ({ onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+  console.log('🔍 VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
+  }, []);
+
 
   const [formData, setFormData] = useState({
     name: '',
