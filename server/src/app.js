@@ -4,12 +4,13 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
-const messageRoutes = require('./routes/message.routes');
+
 
 // Import routes
 const authRoutes = require('./routes/auth.routes');
 const propertyRoutes = require('./routes/property.routes');
 const cityRoutes = require('./routes/city.routes');
+const messageRoutes = require('./routes/message.routes');
 
 // Import middleware
 const errorMiddleware = require('./middleware/error.middleware');
