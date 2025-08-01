@@ -2,7 +2,12 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/wedesihomes', {
+    const uri = process.env.MONGODB_URI;
+    if (!uri) {
+      throw new Error("❌ MONGODB_URI not set in environment variables");
+    }
+
+    const conn = await mongoose.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
