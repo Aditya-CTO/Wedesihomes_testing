@@ -261,9 +261,11 @@ exports.getSavedProperties = asyncHandler(async (req, res) => {
       select: 'name country',
     },
   });
-
-
-// Add this new method to your existing property.controller.js
+  res.json({
+    success: true,
+    properties: user.savedProperties,
+  });
+});
 
 // @desc    Get properties by city name
 // @route   GET /api/properties/search
@@ -308,12 +310,5 @@ exports.getPropertiesByCityName = asyncHandler(async (req, res) => {
     totalPages: Math.ceil(count / limit),
     currentPage: page,
     properties,
-  });
-});
-  
-
-  res.json({
-    success: true,
-    properties: user.savedProperties,
   });
 });
