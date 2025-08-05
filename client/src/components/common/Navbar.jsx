@@ -14,9 +14,15 @@ import {
   Image,
   Container,
   Link as ChakraLink,
+  Avatar,
+  Text,
+  useColorMode,
+  Switch,
+  FormLabel,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon, ChevronDownIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import AuthModal from '../auth/AuthModal';
 
 const Links = [
@@ -32,10 +38,16 @@ const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
+  const { user, logout } = useAuth();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const handleAuthClick = (mode) => {
     setAuthMode(mode);
     setAuthModalOpen(true);
+  };
+
+  const handleLogout = () => {
+    logout();
   };
 
   return (
@@ -52,7 +64,6 @@ const Navbar = () => {
             />
 
             <HStack spacing={8} alignItems="center">
-              {/* ✅ Logo only */}
               <Link to="/">
                 <Image src="/logo.png" alt="WEDESIHOMES" h="40px" />
               </Link>
@@ -81,20 +92,62 @@ const Navbar = () => {
 
             <Flex alignItems="center">
               <HStack spacing={4}>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => handleAuthClick('login')}
-                >
-                  Login
-                </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => handleAuthClick('signup')}
-                >
-                  Sign Up ✨
-                </Button>
+                {/* Dark Mode Toggle */}
+                <HStack>
+                  <SunIcon />
+                  <Switch
+                    isChecked={colorMode === 'dark'}
+                    onChange={toggleColorMode}
+                    colorScheme="green"
+                  />
+                  <MoonIcon />
+                </HStack>
+
+                {user ? (
+                  // User is logged in - show profile menu
+                  <Menu>
+                    <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="ghost">
+                      <HStack>
+                        <Avatar size="sm" name={user.name || user.email} />
+                        <Text display={{ base: 'none', md: 'block' }}>
+                          {user.name || 'Profile'}
+                        </Text>
+                      </HStack>
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem as={Link} to="/profile">
+                        My Profile
+                      </MenuItem>
+                      <MenuItem as={Link} to="/bookings">
+                        My Bookings
+                      </MenuItem>
+                      <MenuItem as={Link} to="/settings">
+                        Settings
+                      </MenuItem>
+                      <MenuItem onClick={handleLogout} color="red.500">
+                        Logout
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                ) : (
+                  // User is not logged in - show login/signup buttons
+                  <>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => handleAuthClick('login')}
+                    >
+                      Login
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => handleAuthClick('signup')}
+                    >
+                      Sign Up ✨
+                    </Button>
+                  </>
+                )}
               </HStack>
             </Flex>
           </Flex>
@@ -112,6 +165,42 @@ const Navbar = () => {
                     {link.name}
                   </ChakraLink>
                 ))}
+                
+                {/* Mobile Auth Section */}
+                {user ? (
+                  <Stack spacing={2} pt={4} borderTop="1px" borderColor="gray.200">
+                    <Text fontWeight="bold">Welcome, {user.name || user.email}!</Text>
+                    <ChakraLink as={Link} to="/profile" onClick={onClose}>
+                      My Profile
+                    </ChakraLink>
+                    <ChakraLink as={Link} to="/bookings" onClick={onClose}>
+                      My Bookings
+                    </ChakraLink>
+                    <ChakraLink as={Link} to="/settings" onClick={onClose}>
+                      Settings
+                    </ChakraLink>
+                    <Button variant="ghost" onClick={handleLogout} color="red.500">
+                      Logout
+                    </Button>
+                  </Stack>
+                ) : (
+                  <Stack spacing={2} pt={4} borderTop="1px" borderColor="gray.200">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => handleAuthClick('login')}
+                    >
+                      Login
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => handleAuthClick('signup')}
+                    >
+                      Sign Up ✨
+                    </Button>
+                  </Stack>
+                )}
               </Stack>
             </Box>
           ) : null}
