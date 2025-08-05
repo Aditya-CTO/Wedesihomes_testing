@@ -12,10 +12,18 @@ import {
 } from '@chakra-ui/react';
 import { FaStar, FaMapMarkerAlt } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const MotionBox = motion(Box);
 
 const PropertyCard = ({ property }) => {
+  const navigate = useNavigate();
+
+  const handleViewDetails = () => {
+    // Navigate to property detail page with property ID
+    navigate(`/property/${property.id || property._id}`);
+  };
+
   return (
     <MotionBox
       whileHover={{ y: -5 }}
@@ -36,6 +44,7 @@ const PropertyCard = ({ property }) => {
             h="200px"
             w="full"
             objectFit="cover"
+            fallbackSrc="/assets/default-property.jpg" // Add fallback image
           />
           <Badge
             position="absolute"
@@ -74,7 +83,7 @@ const PropertyCard = ({ property }) => {
           </HStack>
 
           <HStack spacing={2} flexWrap="wrap">
-            {property.amenities.map((amenity, index) => (
+            {property.amenities?.map((amenity, index) => (
               <Badge
                 key={index}
                 colorScheme="green"
@@ -88,7 +97,13 @@ const PropertyCard = ({ property }) => {
             ))}
           </HStack>
 
-          <Button variant="primary" size="md" w="full">
+          <Button 
+            variant="primary" 
+            size="md" 
+            w="full"
+            onClick={handleViewDetails}
+            _hover={{ transform: 'translateY(-2px)', boxShadow: 'lg' }}
+          >
             View Details
           </Button>
         </VStack>
