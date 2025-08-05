@@ -20,7 +20,7 @@ const PropertyCard = ({ property }) => {
   const navigate = useNavigate();
 
   const handleViewDetails = () => {
-    // Navigate to property detail page with property ID
+    // Navigate to property detail page - using the correct route format
     navigate(`/property/${property.id || property._id}`);
   };
 
@@ -39,12 +39,12 @@ const PropertyCard = ({ property }) => {
       >
         <Box position="relative">
           <Image
-            src={property.image}
+            src={property.image || property.images?.[0]?.url}
             alt={property.name}
             h="200px"
             w="full"
             objectFit="cover"
-            fallbackSrc="/assets/default-property.jpg" // Add fallback image
+            fallbackSrc="/assets/default-property.jpg"
           />
           <Badge
             position="absolute"
@@ -68,22 +68,29 @@ const PropertyCard = ({ property }) => {
             </Text>
             <HStack color="gray.600">
               <Icon as={FaMapMarkerAlt} />
-              <Text>{property.city}, {property.country}</Text>
+              <Text>
+                {property.city && property.country 
+                  ? `${property.city}, ${property.country}`
+                  : property.location?.address || 'Location not specified'
+                }
+              </Text>
             </HStack>
           </VStack>
 
           <HStack justify="space-between">
             <Text fontSize="2xl" fontWeight="bold" color="brand.parrotGreen">
-              {property.price}
+              {property.price || `$${property.price?.amount}/${property.price?.period}`}
             </Text>
             <HStack>
               <Icon as={FaStar} color="yellow.400" />
-              <Text fontWeight="medium">{property.rating}</Text>
+              <Text fontWeight="medium">
+                {property.rating || property.rating?.average || '4.5'}
+              </Text>
             </HStack>
           </HStack>
 
           <HStack spacing={2} flexWrap="wrap">
-            {property.amenities?.map((amenity, index) => (
+            {property.amenities?.slice(0, 3).map((amenity, index) => (
               <Badge
                 key={index}
                 colorScheme="green"
@@ -95,6 +102,17 @@ const PropertyCard = ({ property }) => {
                 {amenity}
               </Badge>
             ))}
+            {property.amenities?.length > 3 && (
+              <Badge
+                colorScheme="gray"
+                variant="subtle"
+                px={2}
+                py={1}
+                borderRadius="full"
+              >
+                +{property.amenities.length - 3} more
+              </Badge>
+            )}
           </HStack>
 
           <Button 
