@@ -9,21 +9,30 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session
     checkAuth();
   }, []);
 
   const checkAuth = async () => {
     try {
-      // Check localStorage or make API call to verify token
       const token = localStorage.getItem('token');
-      if (token) {
-        // Verify token with backend
-        // const response = await api.verifyToken(token);
-        // setUser(response.data.user);
+      const userData = localStorage.getItem('user');
+      
+      if (token && userData) {
+        // Parse stored user data
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+        
+        // Optional: Verify token with backend
+        // const response = await fetch('/api/auth/verify', {
+        //   headers: { Authorization: `Bearer ${token}` }
+        // });
+        // if (!response.ok) throw new Error('Token invalid');
       }
     } catch (error) {
       console.error('Auth check failed:', error);
+      // Clear invalid tokens
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
     } finally {
       setLoading(false);
     }
@@ -31,10 +40,25 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      // Make API call to login
-      // const response = await api.login({ email, password });
-      // localStorage.setItem('token', response.data.token);
-      // setUser(response.data.user);
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      // Store token and user data
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      setUser(data.user);
+
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -43,10 +67,25 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (userData) => {
     try {
-      // Make API call to signup
-      // const response = await api.signup(userData);
-      // localStorage.setItem('token', response.data.token);
-      // setUser(response.data.user);
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Signup failed');
+      }
+
+      // Store token and user data
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      setUser(data.user);
+
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -55,6 +94,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
   };
 
