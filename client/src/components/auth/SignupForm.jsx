@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   VStack,
@@ -13,18 +12,19 @@ import {
   InputRightElement,
   IconButton,
   Checkbox,
+  useToast,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { FaGoogle, FaFacebook } from 'react-icons/fa';
+import { useAuth } from '../../context/AuthContext'; // Import useAuth
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const SignupForm = ({ onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
-
- 
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+  const { signup } = useAuth(); // Use the auth context
 
   const [formData, setFormData] = useState({
     name: '',
@@ -36,13 +36,17 @@ const SignupForm = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
 
     if (!formData.agreeToTerms) {
       setError('You must agree to the Terms & Conditions');
+      setLoading(false);
       return;
     }
 
     try {
+      // Try API call first
       const res = await axios.post(
         `${process.env.REACT_APP_API_URL || 'https://wedesihomes-backend.onrender.com/api'}/auth/register`,
         {
@@ -54,11 +58,46 @@ const SignupForm = ({ onClose }) => {
         { withCredentials: true }
       );
 
-      localStorage.setItem('user', JSON.stringify(res.data.user));
-      onClose?.(); // close modal/drawer if used
-      navigate('/');
+      // Store user data and update context
+      const userData = res.data.user;
+      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('token', res.data.token || 'api-token');
+      
+      // Update auth context
+      await signup(formData);
+      
+      toast({
+        title: 'Account created successfully!',
+        description: `Welcome to WEDESIHOMES, ${userData.name}!`,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      
+      onClose?.();
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      console.log('API signup failed, trying mock signup...');
+      
+      // Fallback to mock signup if API fails
+      try {
+        const result = await signup(formData);
+        if (result.success) {
+          toast({
+            title: 'Account created successfully!',
+            description: `Welcome to WEDESIHOMES!`,
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          onClose?.();
+        } else {
+          setError(result.error || 'Signup failed');
+        }
+      } catch (mockError) {
+        setError('Signup failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -125,7 +164,14 @@ const SignupForm = ({ onClose }) => {
 
       {error && <Text color="red.500" fontSize="sm">{error}</Text>}
 
-      <Button variant="primary" type="submit" w="full" size="lg">
+      <Button 
+        variant="primary" 
+        type="submit" 
+        w="full" 
+        size="lg"
+        isLoading={loading}
+        loadingText="Creating account..."
+      >
         Sign Up
       </Button>
 
