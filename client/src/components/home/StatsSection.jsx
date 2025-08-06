@@ -22,13 +22,14 @@ const stats = [
 ];
 
 const StatsSection = () => {
-  // ✅ Dark mode support - same background as navbar/footer
+  // ✅ ALL HOOKS AT TOP LEVEL
   const sectionBg = useColorModeValue('brand.navyBlue', 'brand.dark.bg.navy');
   const cardBg = useColorModeValue('white', 'brand.dark.bg.card');
   const numberColor = useColorModeValue('brand.parrotGreen', 'brand.parrotGreen');
   const labelColor = useColorModeValue('brand.navyBlue', 'white');
   const shadowNormal = useColorModeValue('lg', 'dark-lg');
   const shadowHover = useColorModeValue('xl', '2xl');
+  const borderColor = useColorModeValue('transparent', 'brand.dark.border');
 
   return (
     <Box py={20} bg={sectionBg}>
@@ -48,11 +49,11 @@ const StatsSection = () => {
                 textAlign="center"
                 boxShadow={shadowNormal}
                 border="1px solid"
-                borderColor={useColorModeValue('transparent', 'brand.dark.border')}
+                borderColor={borderColor}
                 transition="all 0.3s"
                 _hover={{
                   transform: 'translateY(-5px)',
-                  boxShadow: shadowHover,
+                  boxShadow: shadowHover, // ✅ Use pre-defined value
                 }}
               >
                 <StatLabel fontSize="3xl" mb={2}>
