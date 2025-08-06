@@ -30,7 +30,6 @@ import {
   ModalCloseButton,
   useDisclosure,
   useToast,
-  Divider,
 } from '@chakra-ui/react';
 import { 
   FaStar, 
@@ -41,7 +40,6 @@ import {
   FaFilter,
   FaSort,
   FaMapMarkerAlt,
-  FaCalendarAlt
 } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
@@ -65,7 +63,7 @@ const Reviews = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
-  // Dynamic colors
+  // ✅ ALL HOOKS AT TOP LEVEL - BEFORE ANY CONDITIONAL LOGIC
   const bgColor = useColorModeValue('gray.50', 'gray.900');
   const cardBg = useColorModeValue('white', 'brand.dark.cardBg');
   const textColor = useColorModeValue('brand.navyBlue', 'white');
@@ -73,8 +71,13 @@ const Reviews = () => {
   const borderColor = useColorModeValue('gray.200', 'brand.dark.borderColor');
   const statsBg = useColorModeValue('brand.lightGreen', 'brand.dark.lightGreen');
   const ratingColor = useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen');
+  const selectBg = useColorModeValue('white', 'gray.700');
+  const hoverBg = useColorModeValue('gray.50', 'gray.700');
+  const footerBorderColor = useColorModeValue('gray.100', 'gray.700');
+  const modalBg = useColorModeValue('blue.50', 'blue.900');
+  const modalBorderColor = useColorModeValue('blue.200', 'blue.700');
 
-  // Mock reviews data - complete dataset
+  // Mock reviews and stats data
   const mockReviews = [
     {
       id: 1,
@@ -115,71 +118,6 @@ const Reviews = () => {
       helpful: 31,
       category: 'studio'
     },
-    {
-      id: 4,
-      name: 'James Wilson',
-      avatar: 'https://ui-avatars.com/api/?name=James+Wilson&background=001F54&color=fff',
-      rating: 4,
-      date: '2024-01-05',
-      property: 'University Heights, Manchester',
-      title: 'Good Student Housing',
-      review: 'Good accommodation with all necessary amenities. The location is perfect for students. The common areas are well-maintained and there are great study spaces. Security is excellent and staff is friendly.',
-      verified: false,
-      helpful: 12,
-      category: 'private-room'
-    },
-    {
-      id: 5,
-      name: 'Priya Sharma',
-      avatar: 'https://ui-avatars.com/api/?name=Priya+Sharma&background=7CB518&color=fff',
-      rating: 5,
-      date: '2024-01-03',
-      property: 'Downtown Student Hub, Toronto',
-      title: 'Perfect for International Students',
-      review: 'Outstanding experience! WEDESIHOMES made my international move so much easier. The property was beautiful and the location was perfect for getting to university. The community events helped me make friends quickly.',
-      verified: true,
-      helpful: 27,
-      category: 'entire-place'
-    },
-    {
-      id: 6,
-      name: 'Alex Rodriguez',
-      avatar: 'https://ui-avatars.com/api/?name=Alex+Rodriguez&background=001F54&color=fff',
-      rating: 4,
-      date: '2023-12-28',
-      property: 'City Central Residence, Edinburgh',
-      title: 'Solid Choice',
-      review: 'Solid choice for student accommodation. Clean facilities, good security, and helpful staff. The only downside was limited parking, but public transport is excellent. Great location in the heart of Edinburgh.',
-      verified: true,
-      helpful: 15,
-      category: 'student-accommodation'
-    },
-    {
-      id: 7,
-      name: 'Lisa Martinez',
-      avatar: 'https://ui-avatars.com/api/?name=Lisa+Martinez&background=7CB518&color=fff',
-      rating: 5,
-      date: '2023-12-20',
-      property: 'Ocean View Apartments, Melbourne',
-      title: 'Beautiful Location',
-      review: 'Absolutely loved my stay here! The ocean view was breathtaking and the apartment was modern and well-equipped. Close to Monash University and great public transport connections. The rooftop BBQ area was a hit with everyone.',
-      verified: true,
-      helpful: 22,
-      category: 'studio'
-    },
-    {
-      id: 8,
-      name: 'David Kim',
-      avatar: 'https://ui-avatars.com/api/?name=David+Kim&background=001F54&color=fff',
-      rating: 3,
-      date: '2023-12-15',
-      property: 'Student Lodge, Birmingham',
-      title: 'Average Experience',
-      review: 'Average experience overall. The room was okay but could use some updates. Staff was helpful when issues arose. Location was decent for getting to the University of Birmingham. Internet speed could be better.',
-      verified: false,
-      helpful: 8,
-      category: 'shared-apartment'
-    }
   ];
 
   const mockStats = {
@@ -235,7 +173,6 @@ const Reviews = () => {
 
   const handleSubmitReview = async () => {
     try {
-      // Validate form
       if (!newReview.property || !newReview.title || !newReview.review || !newReview.name || !newReview.email) {
         toast({
           title: 'Missing Information',
@@ -247,7 +184,6 @@ const Reviews = () => {
         return;
       }
 
-      // Simulate API call
       console.log('Submitting review:', newReview);
       
       toast({
@@ -258,7 +194,6 @@ const Reviews = () => {
         isClosable: true,
       });
       
-      // Reset form
       setNewReview({
         rating: 5,
         property: '',
@@ -366,7 +301,7 @@ const Reviews = () => {
                       <Icon as={FaStar} color="yellow.400" boxSize="12px" />
                     </HStack>
                     <Progress
-                      value={stats.ratingDistribution[star]}
+                                            value={stats.ratingDistribution[star]}
                       size="md"
                       colorScheme="green"
                       flex={1}
@@ -402,7 +337,7 @@ const Reviews = () => {
                   value={filterBy}
                   onChange={(e) => setFilterBy(e.target.value)}
                   maxW="200px"
-                  bg={useColorModeValue('white', 'gray.700')}
+                  bg={selectBg}
                 >
                   <option value="all">All Reviews</option>
                   <option value="verified">Verified Only</option>
@@ -422,7 +357,7 @@ const Reviews = () => {
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                   maxW="200px"
-                  bg={useColorModeValue('white', 'gray.700')}
+                  bg={selectBg}
                 >
                   <option value="newest">Newest First</option>
                   <option value="oldest">Oldest First</option>
@@ -449,7 +384,7 @@ const Reviews = () => {
                 key={review.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <Box
                   bg={cardBg}
@@ -512,7 +447,7 @@ const Reviews = () => {
                     </Box>
 
                     {/* Footer */}
-                    <HStack justify="space-between" pt={2} borderTop="1px" borderColor={useColorModeValue('gray.100', 'gray.700')}>
+                    <HStack justify="space-between" pt={2} borderTop="1px" borderColor={footerBorderColor}>
                       <Button
                         size="xs"
                         variant="ghost"
@@ -520,7 +455,7 @@ const Reviews = () => {
                         color={subtextColor}
                         _hover={{ 
                           color: ratingColor,
-                          bg: useColorModeValue('gray.50', 'gray.700')
+                          bg: hoverBg
                         }}
                       >
                         Helpful ({review.helpful})
@@ -547,7 +482,7 @@ const Reviews = () => {
           </SimpleGrid>
 
           {/* Load More Button */}
-          {reviews.length >= 6 && (
+          {reviews.length >= 3 && (
             <Center>
               <Button 
                 variant="outline" 
@@ -663,8 +598,6 @@ const Reviews = () => {
                   <option value="University Heights, Manchester">University Heights, Manchester</option>
                   <option value="Downtown Student Hub, Toronto">Downtown Student Hub, Toronto</option>
                   <option value="City Central Residence, Edinburgh">City Central Residence, Edinburgh</option>
-                  <option value="Ocean View Apartments, Melbourne">Ocean View Apartments, Melbourne</option>
-                  <option value="Student Lodge, Birmingham">Student Lodge, Birmingham</option>
                 </Select>
               </FormControl>
 
@@ -710,12 +643,12 @@ const Reviews = () => {
 
               {/* Guidelines */}
               <Box 
-                bg={useColorModeValue('blue.50', 'blue.900')} 
+                bg={modalBg}
                 p={4} 
                 borderRadius="md" 
                 w="full"
                 border="1px solid"
-                borderColor={useColorModeValue('blue.200', 'blue.700')}
+                borderColor={modalBorderColor}
               >
                 <VStack align="start" spacing={2}>
                   <Text fontSize="sm" fontWeight="bold" color={textColor}>
