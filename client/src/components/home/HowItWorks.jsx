@@ -36,13 +36,18 @@ const steps = [
 ];
 
 const HowItWorks = () => {
-  // 👈 Dark mode support - keeps gray.50 in light, dark background in dark
+  // ✅ ALL HOOKS AT TOP LEVEL - BEFORE ANY CONDITIONAL LOGIC OR CALLBACKS
   const bgColor = useColorModeValue('gray.50', 'brand.dark.bg.primary');
   const cardBg = useColorModeValue('white', 'brand.dark.bg.card');
   const headingColor = useColorModeValue('brand.navyBlue', 'white');
   const textColor = useColorModeValue('gray.600', 'brand.dark.text.secondary');
   const titleColor = useColorModeValue('brand.navyBlue', 'white');
   const stepBg = useColorModeValue('brand.lightGreen', 'rgba(124, 181, 24, 0.2)');
+  const borderColor = useColorModeValue('transparent', 'brand.dark.border');
+  
+  // Pre-define shadow values for hover states
+  const shadowNormal = useColorModeValue('lg', 'dark-lg');
+  const shadowHover = useColorModeValue('xl', '2xl');
 
   return (
     <Box py={20} bg={bgColor}>
@@ -69,15 +74,15 @@ const HowItWorks = () => {
                   bg={cardBg}
                   p={8}
                   borderRadius="2xl"
-                  boxShadow={useColorModeValue('lg', 'dark-lg')}
+                  boxShadow={shadowNormal}  // ✅ Use pre-defined value
                   border="1px solid"
-                  borderColor={useColorModeValue('transparent', 'brand.dark.border')}
+                  borderColor={borderColor}
                   spacing={4}
                   h="full"
                   transition="all 0.3s"
                   _hover={{
                     transform: 'translateY(-5px)',
-                    boxShadow: useColorModeValue('xl', '2xl'),
+                    boxShadow: shadowHover,  // ✅ Use pre-defined value
                   }}
                 >
                   <Box
