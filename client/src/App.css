@@ -28,6 +28,33 @@
   color: #61dafb;
 }
 
+/* Add to src/index.css or App.css */
+.chakra-ui-dark {
+  /* Override hardcoded blue text */
+  [style*="color: rgb(0, 31, 84)"],
+  [style*="color: #001F54"] {
+    color: #60A5FA !important;
+  }
+  
+  /* Override white backgrounds */
+  [style*="background-color: white"],
+  [style*="background: white"] {
+    background-color: #2A2A2A !important;
+  }
+  
+  /* Fix search input specifically */
+  input[placeholder*="Search"],
+  input[placeholder*="Enter"] {
+    background-color: #1A1A1A !important;
+    color: white !important;
+  }
+  
+  input[placeholder*="Search"]::placeholder,
+  input[placeholder*="Enter"]::placeholder {
+    color: #A0A0A0 !important;
+  }
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
