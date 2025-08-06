@@ -23,6 +23,13 @@ import RoomDetailPage from './pages/RoomDetailPage';
 import LoginForm from './components/auth/LoginForm';
 import SignupForm from './components/auth/SignupForm';
 
+import Profile from './pages/Profile';
+import Bookings from './pages/Bookings';
+import Settings from './pages/Settings';
+import SearchResults from './pages/SearchResults';
+import Reviews from './pages/Reviews';
+
+
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -43,6 +50,13 @@ function App() {
             <Route path="/properties/:cityName" element={<PropertiesListPage />} />
             <Route path="/property/:propertyId" element={<PropertyDetailPage />} />
             <Route path="/property/:propertyId/room/:roomType" element={<RoomDetailPage />} />
+
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/bookings" element={<Bookings />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/search-results" element={<SearchResults />} />
+            <Route path="/reviews" element={<Reviews />} />
+            <Route path="/property/:propertyId" element={<PropertyDetailPage />} />
 
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
