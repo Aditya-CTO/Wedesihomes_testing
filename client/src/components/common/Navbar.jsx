@@ -52,7 +52,7 @@ const Navbar = () => {
   // ✅ MOVE ALL HOOKS TO TOP - BEFORE ANY CONDITIONAL RETURNS
   const navBg = useColorModeValue(
     'rgba(255, 255, 255, 0.95)', 
-    'rgba(42, 42, 42, 0.95)'
+    'rgba(15, 15, 15, 0.95)'
   );
   const borderColor = useColorModeValue('gray.100', 'brand.dark.borderColor');
   const linkHoverBg = useColorModeValue('brand.lightGreen', 'brand.dark.lightGreen');
