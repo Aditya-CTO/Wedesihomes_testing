@@ -29,23 +29,27 @@
 }
 
 /* Add to src/index.css or App.css */
+/* Dark mode shadow utilities */
+.chakra-ui-dark .chakra-shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.chakra-ui-dark .chakra-shadow-xl {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3) !important;
+}
+
+.chakra-ui-dark .chakra-shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
 /* Force consistent backgrounds */
 .chakra-ui-dark {
   background-color: #0F0F0F !important;
 }
 
-.chakra-ui-dark #root,
-.chakra-ui-dark body {
+.chakra-ui-dark #root {
   background-color: #0F0F0F !important;
-}
-
-/* Fix any remaining blue sections */
-.chakra-ui-dark [style*="background-color: rgb(0, 31, 84)"] {
-  background-color: #1A1A2E !important;
-}
-
-.chakra-ui-dark [style*="color: rgb(0, 31, 84)"] {
-  color: #60A5FA !important;
+  min-height: 100vh;
 }
 
 @keyframes App-logo-spin {
