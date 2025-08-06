@@ -49,7 +49,7 @@ const Navbar = () => {
   const { user, logout, loading } = useAuth();
   const { colorMode, toggleColorMode } = useColorMode();
   
-  // Dynamic colors based on theme
+  // ✅ MOVE ALL HOOKS TO TOP - BEFORE ANY CONDITIONAL RETURNS
   const navBg = useColorModeValue(
     'rgba(255, 255, 255, 0.95)', 
     'rgba(42, 42, 42, 0.95)'
@@ -59,6 +59,15 @@ const Navbar = () => {
   const linkHoverColor = useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen');
   const menuBg = useColorModeValue('white', 'brand.dark.cardBg');
   const menuBorderColor = useColorModeValue('gray.200', 'brand.dark.borderColor');
+  const hoverBg = useColorModeValue('gray.100', 'brand.dark.hoverBg');
+  const toggleColor = useColorModeValue('gray.600', 'yellow.400');
+  const toggleHoverColor = useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen');
+  const profileBorderColor = useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen');
+  const menuItemHoverBg = useColorModeValue('gray.50', 'brand.dark.hoverBg');
+  const menuItemHoverColor = useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen');
+  const logoutHoverBg = useColorModeValue('red.50', 'red.900');
+  const mobileHoverColor = useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen');
+  const mobileBorderColor = useColorModeValue('gray.100', 'gray.700');
 
   const handleAuthClick = (mode) => {
     setAuthMode(mode);
@@ -69,6 +78,7 @@ const Navbar = () => {
     logout();
   };
 
+  // ✅ NOW CONDITIONAL RETURN IS SAFE - ALL HOOKS CALLED ABOVE
   if (loading) {
     return (
       <Box 
@@ -107,9 +117,7 @@ const Navbar = () => {
               display={{ md: 'none' }}
               onClick={isOpen ? onClose : onOpen}
               variant="ghost"
-              _hover={{
-                bg: useColorModeValue('gray.100', 'brand.dark.hoverBg'),
-              }}
+              _hover={{ bg: hoverBg }}
             />
 
             <HStack spacing={8} alignItems="center">
@@ -150,7 +158,7 @@ const Navbar = () => {
 
             <Flex alignItems="center">
               <HStack spacing={4}>
-                {/* Enhanced Dark Mode Toggle */}
+                {/* Dark Mode Toggle */}
                 <IconButton
                   aria-label="Toggle dark mode"
                   icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
@@ -159,24 +167,22 @@ const Navbar = () => {
                   size="md"
                   fontSize="18px"
                   transition="all 0.3s ease-in-out"
-                  color={useColorModeValue('gray.600', 'yellow.400')}
+                  color={toggleColor}
                   _hover={{
                     transform: 'rotate(180deg) scale(1.1)',
-                    bg: useColorModeValue('gray.100', 'brand.dark.hoverBg'),
-                    color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen'),
+                    bg: hoverBg,
+                    color: toggleHoverColor,
                   }}
                 />
 
                 {user ? (
-                  // User is logged in - show enhanced profile menu
+                  // User is logged in
                   <Menu>
                     <MenuButton 
                       as={Button} 
                       rightIcon={<ChevronDownIcon />} 
                       variant="ghost"
-                      _hover={{
-                        bg: useColorModeValue('gray.100', 'brand.dark.hoverBg'),
-                      }}
+                      _hover={{ bg: hoverBg }}
                     >
                       <HStack>
                         <Avatar 
@@ -184,7 +190,7 @@ const Navbar = () => {
                           name={user.name || user.email}
                           src={user.avatar}
                           border="2px solid"
-                          borderColor={useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen')}
+                          borderColor={profileBorderColor}
                         />
                         <Text 
                           display={{ base: 'none', md: 'block' }}
@@ -216,8 +222,8 @@ const Navbar = () => {
                         to="/profile"
                         icon={<Avatar size="xs" />}
                         _hover={{ 
-                          bg: useColorModeValue('gray.50', 'brand.dark.hoverBg'),
-                          color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen')
+                          bg: menuItemHoverBg,
+                          color: menuItemHoverColor
                         }}
                       >
                         My Profile
@@ -228,8 +234,8 @@ const Navbar = () => {
                         to="/bookings"
                         icon={<CalendarIcon />}
                         _hover={{ 
-                          bg: useColorModeValue('gray.50', 'brand.dark.hoverBg'),
-                          color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen')
+                          bg: menuItemHoverBg,
+                          color: menuItemHoverColor
                         }}
                       >
                         My Bookings
@@ -240,8 +246,8 @@ const Navbar = () => {
                         to="/settings"
                         icon={<SettingsIcon />}
                         _hover={{ 
-                          bg: useColorModeValue('gray.50', 'brand.dark.hoverBg'),
-                          color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen')
+                          bg: menuItemHoverBg,
+                          color: menuItemHoverColor
                         }}
                       >
                         Settings
@@ -253,7 +259,7 @@ const Navbar = () => {
                         onClick={handleLogout} 
                         color="red.500"
                         _hover={{ 
-                          bg: useColorModeValue('red.50', 'red.900'),
+                          bg: logoutHoverBg,
                           color: 'red.400'
                         }}
                       >
@@ -262,16 +268,16 @@ const Navbar = () => {
                     </MenuList>
                   </Menu>
                 ) : (
-                  // User is not logged in - show enhanced login/signup buttons
+                  // User is not logged in
                   <HStack spacing={3}>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => handleAuthClick('login')}
                       _hover={{
-                        bg: useColorModeValue('gray.100', 'brand.dark.hoverBg'),
+                        bg: hoverBg,
                         transform: 'translateY(-1px)',
-                        color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen'),
+                        color: mobileHoverColor,
                       }}
                     >
                       Login
@@ -295,7 +301,7 @@ const Navbar = () => {
             </Flex>
           </Flex>
 
-          {/* Enhanced Mobile Menu */}
+          {/* Mobile Menu */}
           {isOpen ? (
             <Box 
               pb={4} 
@@ -328,14 +334,14 @@ const Navbar = () => {
                 
                 {/* Mobile Auth Section */}
                 {user ? (
-                  <Stack spacing={3} pt={4} borderTop="1px" borderColor={borderColor}>
+                  <Stack spacing={3} pt={4} borderTop="1px" borderColor={mobileBorderColor}>
                     <HStack>
                       <Avatar 
                         size="sm" 
                         name={user.name} 
                         src={user.avatar}
                         border="2px solid"
-                        borderColor={useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen')}
+                        borderColor={profileBorderColor}
                       />
                       <Text fontWeight="bold">{user.name}</Text>
                     </HStack>
@@ -343,9 +349,7 @@ const Navbar = () => {
                       as={Link} 
                       to="/profile" 
                       onClick={onClose}
-                      _hover={{ 
-                        color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen') 
-                      }}
+                      _hover={{ color: mobileHoverColor }}
                     >
                       My Profile
                     </ChakraLink>
@@ -353,9 +357,7 @@ const Navbar = () => {
                       as={Link} 
                       to="/bookings" 
                       onClick={onClose}
-                      _hover={{ 
-                        color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen') 
-                      }}
+                      _hover={{ color: mobileHoverColor }}
                     >
                       My Bookings
                     </ChakraLink>
@@ -363,9 +365,7 @@ const Navbar = () => {
                       as={Link} 
                       to="/settings" 
                       onClick={onClose}
-                      _hover={{ 
-                        color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen') 
-                      }}
+                      _hover={{ color: mobileHoverColor }}
                     >
                       Settings
                     </ChakraLink>
@@ -375,21 +375,21 @@ const Navbar = () => {
                       color="red.500"
                       size="sm"
                       justifyContent="flex-start"
-                      _hover={{ bg: useColorModeValue('red.50', 'red.900') }}
+                      _hover={{ bg: logoutHoverBg }}
                     >
                       Logout
                     </Button>
                   </Stack>
                 ) : (
-                  <Stack spacing={3} pt={4} borderTop="1px" borderColor={borderColor}>
+                  <Stack spacing={3} pt={4} borderTop="1px" borderColor={mobileBorderColor}>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => handleAuthClick('login')}
                       justifyContent="flex-start"
                       _hover={{
-                        bg: useColorModeValue('gray.100', 'brand.dark.hoverBg'),
-                        color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen'),
+                        bg: hoverBg,
+                        color: mobileHoverColor,
                       }}
                     >
                       Login
