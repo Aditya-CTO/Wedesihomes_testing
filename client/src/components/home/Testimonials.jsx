@@ -18,103 +18,13 @@ import {
 } from '@chakra-ui/react';
 import { FaQuoteLeft, FaStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper';
 import { useNavigate } from 'react-router-dom';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 
 const MotionBox = motion(Box);
 const MotionFlex = motion(Flex);
 
-// Testimonials data placeholder (you can add actual data)
+// Testimonials data placeholder
 const testimonials = [];
-
-const TestimonialCard = ({ testimonial, isActive }) => {
-  const cardBg = useColorModeValue('white', 'brand.dark.bg.card');
-  const textColor = useColorModeValue('gray.700', 'brand.dark.text.secondary');
-  const nameColor = useColorModeValue('brand.navyBlue', 'white');
-  const universityColor = useColorModeValue('gray.600', 'brand.dark.text.muted');
-  const borderColor = useColorModeValue('gray.100', 'brand.dark.border');
-  const shadowNormal = useColorModeValue(isActive ? 'xl' : 'lg', 'dark-lg');
-  const shadowHover = useColorModeValue('2xl', '2xl');
-
-  return (
-    <MotionBox
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.5 }}
-      h="full"
-    >
-      <VStack
-        bg={cardBg}
-        p={{ base: 6, md: 8 }}
-        borderRadius="2xl"
-        boxShadow={shadowNormal}
-        spacing={6}
-        h="full"
-        position="relative"
-        transition="all 0.3s"
-        _hover={{
-          transform: 'translateY(-5px)',
-          boxShadow: shadowHover,
-        }}
-        border="1px solid"
-        borderColor={borderColor}
-      >
-        <Icon
-          as={FaQuoteLeft}
-          color="brand.parrotGreen"
-          fontSize={{ base: '2xl', md: '3xl' }}
-          position="absolute"
-          top={4}
-          left={4}
-          opacity={0.2}
-        />
-        <HStack spacing={1} alignSelf="flex-start" mt={2}>
-          {[...Array(testimonial.rating)].map((_, i) => (
-            <Icon key={i} as={FaStar} color="yellow.400" fontSize="lg" />
-          ))}
-        </HStack>
-        <Text
-          color={textColor}
-          fontSize={{ base: 'md', md: 'lg' }}
-          textAlign="center"
-          flex={1}
-          lineHeight="tall"
-        >
-          "{testimonial.text}"
-        </Text>
-        <Badge colorScheme="green" px={3} py={1} borderRadius="full" fontSize="sm">
-          {testimonial.propertyName}
-        </Badge>
-        <VStack spacing={3} w="full">
-          <Flex align="center" gap={4}>
-            <Text fontSize="4xl">{testimonial.avatar}</Text>
-            <VStack align="start" spacing={0}>
-              <Text fontWeight="bold" fontSize="lg" color={nameColor}>
-                {testimonial.name}
-              </Text>
-              <Text fontSize="sm" color={universityColor}>
-                {testimonial.university}
-              </Text>
-              <HStack spacing={2}>
-                <Text fontSize="xs" color={universityColor}>
-                  {testimonial.country}
-                </Text>
-                <Text fontSize="xs" color={universityColor}>
-                  • {testimonial.date}
-                </Text>
-              </HStack>
-            </VStack>
-          </Flex>
-        </VStack>
-      </VStack>
-    </MotionBox>
-  );
-};
 
 const Testimonials = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -122,7 +32,7 @@ const Testimonials = () => {
   const slidesPerView = useBreakpointValue({ base: 1, md: 2, lg: 3 });
   const navigate = useNavigate();
 
-  // ✅ Dark mode support
+  // ✅ ALL HOOKS AT TOP LEVEL
   const sectionBg = useColorModeValue('gray.50', 'brand.dark.bg.secondary');
   const headingColor = useColorModeValue('brand.navyBlue', 'white');
   const textColor = useColorModeValue('gray.600', 'brand.dark.text.secondary');
@@ -130,6 +40,7 @@ const Testimonials = () => {
   const statTextColor = useColorModeValue('gray.600', 'brand.dark.text.secondary');
   const ctaBg = useColorModeValue('brand.navyBlue', 'brand.dark.bg.navy');
   const shadowNormal = useColorModeValue('md', 'dark-lg');
+  const borderColor = useColorModeValue('transparent', 'brand.dark.border');
 
   const stats = [
     { label: 'Happy Students', value: '5000+', emoji: '😊' },
@@ -184,7 +95,7 @@ const Testimonials = () => {
                 borderRadius="2xl"
                 boxShadow={shadowNormal}
                 border="1px solid"
-                borderColor={useColorModeValue('transparent', 'brand.dark.border')}
+                borderColor={borderColor}
                 spacing={2}
                 minW={{ base: '150px', md: '200px' }}
               >
