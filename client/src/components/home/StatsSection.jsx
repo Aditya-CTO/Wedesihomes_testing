@@ -22,8 +22,16 @@ const stats = [
 ];
 
 const StatsSection = () => {
+  // ✅ Dark mode support - same background as navbar/footer
+  const sectionBg = useColorModeValue('brand.navyBlue', 'brand.dark.bg.navy');
+  const cardBg = useColorModeValue('white', 'brand.dark.bg.card');
+  const numberColor = useColorModeValue('brand.parrotGreen', 'brand.parrotGreen');
+  const labelColor = useColorModeValue('brand.navyBlue', 'white');
+  const shadowNormal = useColorModeValue('lg', 'dark-lg');
+  const shadowHover = useColorModeValue('xl', '2xl');
+
   return (
-    <Box py={20} bg="brand.navyBlue">
+    <Box py={20} bg={sectionBg}>
       <Container maxW="container.xl">
         <SimpleGrid columns={{ base: 2, md: 4 }} spacing={8}>
           {stats.map((stat, index) => (
@@ -34,15 +42,17 @@ const StatsSection = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <Stat
-                bg="white"
+                bg={cardBg}
                 p={6}
                 borderRadius="2xl"
                 textAlign="center"
-                boxShadow="lg"
+                boxShadow={shadowNormal}
+                border="1px solid"
+                borderColor={useColorModeValue('transparent', 'brand.dark.border')}
                 transition="all 0.3s"
                 _hover={{
                   transform: 'translateY(-5px)',
-                  boxShadow: 'xl',
+                  boxShadow: shadowHover,
                 }}
               >
                 <StatLabel fontSize="3xl" mb={2}>
@@ -50,7 +60,7 @@ const StatsSection = () => {
                 </StatLabel>
                 <StatNumber
                   fontSize="4xl"
-                  color="brand.parrotGreen"
+                  color={numberColor}
                   fontWeight="bold"
                 >
                   <CountUp end={stat.value} duration={2} />
@@ -58,7 +68,7 @@ const StatsSection = () => {
                 </StatNumber>
                 <StatHelpText
                   fontSize="lg"
-                  color="brand.navyBlue"
+                  color={labelColor}
                   fontWeight="medium"
                 >
                   {stat.label}
