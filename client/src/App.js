@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, Box } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import theme from './theme/theme';
 
@@ -29,7 +29,6 @@ import Settings from './pages/Settings';
 import SearchResults from './pages/SearchResults';
 import Reviews from './pages/Reviews';
 
-
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -37,34 +36,35 @@ function App() {
     <ChakraProvider theme={theme}>
       <AuthProvider>
         <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/explore-cities" element={<ExploreCities />} />
-            <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/for-property-owners" element={<ForPropertyOwners />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/contact" element={<ContactUs />} />
+          <Box variant="page"> {/* 👈 Added wrapper for consistent background */}
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/explore-cities" element={<ExploreCities />} />
+              <Route path="/how-it-works" element={<HowItWorks />} />
+              <Route path="/for-property-owners" element={<ForPropertyOwners />} />
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/contact" element={<ContactUs />} />
 
-            {/* NEW ROUTES - ADD THESE */}
-            <Route path="/properties/:cityName" element={<PropertiesListPage />} />
-            <Route path="/property/:propertyId" element={<PropertyDetailPage />} />
-            <Route path="/property/:propertyId/room/:roomType" element={<RoomDetailPage />} />
+              {/* NEW ROUTES - ADD THESE */}
+              <Route path="/properties/:cityName" element={<PropertiesListPage />} />
+              <Route path="/property/:propertyId" element={<PropertyDetailPage />} />
+              <Route path="/property/:propertyId/room/:roomType" element={<RoomDetailPage />} />
 
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/bookings" element={<Bookings />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/search-results" element={<SearchResults />} />
-            <Route path="/reviews" element={<Reviews />} />
-            <Route path="/property/:propertyId" element={<PropertyDetailPage />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/bookings" element={<Bookings />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/search-results" element={<SearchResults />} />
+              <Route path="/reviews" element={<Reviews />} />
 
-            <Route path="/login" element={<LoginForm />} />
-            <Route path="/signup" element={<SignupForm />} />
+              <Route path="/login" element={<LoginForm />} />
+              <Route path="/signup" element={<SignupForm />} />
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Footer />
-          <ChatbotIcon />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <Footer />
+            <ChatbotIcon />
+          </Box>
         </Router>
       </AuthProvider>
     </ChakraProvider>
