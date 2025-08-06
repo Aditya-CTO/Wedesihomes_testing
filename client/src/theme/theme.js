@@ -12,7 +12,7 @@ const theme = extendTheme({
       white: '#FFFFFF',
       lightGreen: '#E8F5E9',
       lightBlue: '#E3F2FD',
-      
+
       dark: {
         parrotGreen: '#7CB518',
         navyBlue: '#60A5FA',           // Lighter blue for readability
@@ -35,33 +35,43 @@ const theme = extendTheme({
   },
   fonts: {
     heading: "'Poppins', sans-serif",
-    body: "'Inter', sans-serif",
+    body: "'Inter', sans-serif',
   },
   styles: {
     global: (props) => ({
       body: {
-        bg: props.colorMode === 'dark' ? '#0F0F0F !important' : 'white',  // Force same background
+        bg: props.colorMode === 'dark' ? '#0F0F0F !important' : 'white',
         color: props.colorMode === 'dark' ? '#FFFFFF' : 'brand.navyBlue',
         transition: 'all 0.3s ease-in-out',
         minHeight: '100vh',
       },
-      // Force consistent backgrounds
       '#root': {
         bg: props.colorMode === 'dark' ? '#0F0F0F !important' : 'white',
         minHeight: '100vh',
       },
-      // Fix blue backgrounds in dark mode
       ...(props.colorMode === 'dark' && {
-        // Convert blue sections to dark
         '[style*="background: linear-gradient"][style*="blue"]': {
           background: 'linear-gradient(135deg, #1A1A2E 0%, #0F0F0F 100%) !important',
         },
         '[style*="background-color: #001F54"], [style*="background: #001F54"]': {
           backgroundColor: '#1A1A2E !important',
         },
-        // Fix blue text
         '[style*="color: #001F54"], [style*="color: rgb(0, 31, 84)"]': {
           color: '#60A5FA !important',
+        },
+        // ✅ NEWLY ADDED PART
+        'h1, h2, h3, h4, h5, h6': {
+          '&[style*="color: rgb(0, 31, 84)"], &[style*="color:#001F54"]': {
+            color: '#60A5FA !important',
+          },
+        },
+        '[style*="color: rgb(0, 31, 84)"], [style*="color:#001F54"]': {
+          color: '#60A5FA !important',
+        },
+        '.chakra-heading': {
+          '&[style*="color: rgb(0, 31, 84)"]': {
+            color: 'white !important',
+          },
         },
       }),
     }),
