@@ -16,8 +16,8 @@ import {
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { FaGoogle, FaFacebook } from 'react-icons/fa';
+import { useAuth } from '../../context/AuthContext'; // Import useAuth
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const LoginForm = ({ onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,30 +25,59 @@ const LoginForm = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const toast = useToast();
-  const navigate = useNavigate();
+  const { login } = useAuth(); // Use the auth context
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    
     try {
+      // Try API call first
       const res = await axios.post(
-        // CORRECT (CRA syntax)
         `${process.env.REACT_APP_API_URL || 'https://wedesihomes-backend.onrender.com/api'}/auth/login`,
         formData,
         { withCredentials: true }
       );
-      localStorage.setItem('user', JSON.stringify(res.data.user));
+      
+      // Store user data and update context
+      const userData = res.data.user;
+      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('token', res.data.token || 'api-token');
+      
+      // Update auth context
+      await login(formData.email, formData.password);
+      
       toast({
-        title: 'Login successful',
+        title: 'Login successful!',
+        description: `Welcome back, ${userData.name}!`,
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
+      
       onClose?.();
-      navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      console.log('API login failed, trying mock login...');
+      
+      // Fallback to mock login if API fails
+      try {
+        const result = await login(formData.email, formData.password);
+        if (result.success) {
+          toast({
+            title: 'Login successful!',
+            description: `Welcome back!`,
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          onClose?.();
+        } else {
+          setError(result.error || 'Login failed');
+        }
+      } catch (mockError) {
+        setError('Login failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
