@@ -17,10 +17,18 @@ import {
   Avatar,
   Text,
   useColorMode,
-  Switch,
-  FormLabel,
+  useColorModeValue,
+  MenuDivider,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon, ChevronDownIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
+import { 
+  HamburgerIcon, 
+  CloseIcon, 
+  ChevronDownIcon, 
+  MoonIcon, 
+  SunIcon,
+  SettingsIcon,
+  CalendarIcon
+} from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import AuthModal from '../auth/AuthModal';
@@ -38,8 +46,19 @@ const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
-  const { user, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
   const { colorMode, toggleColorMode } = useColorMode();
+  
+  // Dynamic colors based on theme
+  const navBg = useColorModeValue(
+    'rgba(255, 255, 255, 0.95)', 
+    'rgba(42, 42, 42, 0.95)'
+  );
+  const borderColor = useColorModeValue('gray.100', 'brand.dark.borderColor');
+  const linkHoverBg = useColorModeValue('brand.lightGreen', 'brand.dark.lightGreen');
+  const linkHoverColor = useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen');
+  const menuBg = useColorModeValue('white', 'brand.dark.cardBg');
+  const menuBorderColor = useColorModeValue('gray.200', 'brand.dark.borderColor');
 
   const handleAuthClick = (mode) => {
     setAuthMode(mode);
@@ -50,9 +69,35 @@ const Navbar = () => {
     logout();
   };
 
+  if (loading) {
+    return (
+      <Box 
+        bg={navBg}
+        backdropFilter="blur(10px)"
+        borderBottom="1px"
+        borderColor={borderColor}
+        px={4} 
+        position="sticky" 
+        top={0} 
+        zIndex={100}
+        h="64px"
+      />
+    );
+  }
+
   return (
     <>
-      <Box bg="white" px={4} boxShadow="sm" position="sticky" top={0} zIndex={100}>
+      <Box 
+        bg={navBg}
+        backdropFilter="blur(10px)"
+        borderBottom="1px"
+        borderColor={borderColor}
+        px={4} 
+        position="sticky" 
+        top={0} 
+        zIndex={100}
+        transition="all 0.3s ease-in-out"
+      >
         <Container maxW="container.xl">
           <Flex h={16} alignItems="center" justifyContent="space-between">
             <IconButton
@@ -61,11 +106,21 @@ const Navbar = () => {
               aria-label="Open Menu"
               display={{ md: 'none' }}
               onClick={isOpen ? onClose : onOpen}
+              variant="ghost"
+              _hover={{
+                bg: useColorModeValue('gray.100', 'brand.dark.hoverBg'),
+              }}
             />
 
             <HStack spacing={8} alignItems="center">
               <Link to="/">
-                <Image src="/logo.png" alt="WEDESIHOMES" h="40px" />
+                <Image 
+                  src="/logo.png" 
+                  alt="WEDESIHOMES" 
+                  h="40px"
+                  filter={colorMode === 'dark' ? 'brightness(1.2) contrast(1.1)' : 'none'}
+                  transition="filter 0.3s ease-in-out"
+                />
               </Link>
 
               <HStack as="nav" spacing={4} display={{ base: 'none', md: 'flex' }}>
@@ -74,15 +129,18 @@ const Navbar = () => {
                     key={link.name}
                     as={Link}
                     to={link.path}
-                    px={2}
-                    py={1}
-                    rounded="md"
+                    px={3}
+                    py={2}
+                    rounded="lg"
+                    fontSize="sm"
+                    fontWeight="medium"
+                    transition="all 0.2s ease-in-out"
                     _hover={{
                       textDecoration: 'none',
-                      bg: 'brand.lightGreen',
-                      color: 'brand.parrotGreen',
+                      bg: linkHoverBg,
+                      color: linkHoverColor,
+                      transform: 'translateY(-1px)',
                     }}
-                    fontWeight="medium"
                   >
                     {link.name}
                   </ChakraLink>
@@ -92,50 +150,129 @@ const Navbar = () => {
 
             <Flex alignItems="center">
               <HStack spacing={4}>
-                {/* Dark Mode Toggle */}
-                <HStack>
-                  <SunIcon />
-                  <Switch
-                    isChecked={colorMode === 'dark'}
-                    onChange={toggleColorMode}
-                    colorScheme="green"
-                  />
-                  <MoonIcon />
-                </HStack>
+                {/* Enhanced Dark Mode Toggle */}
+                <IconButton
+                  aria-label="Toggle dark mode"
+                  icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+                  onClick={toggleColorMode}
+                  variant="ghost"
+                  size="md"
+                  fontSize="18px"
+                  transition="all 0.3s ease-in-out"
+                  color={useColorModeValue('gray.600', 'yellow.400')}
+                  _hover={{
+                    transform: 'rotate(180deg) scale(1.1)',
+                    bg: useColorModeValue('gray.100', 'brand.dark.hoverBg'),
+                    color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen'),
+                  }}
+                />
 
                 {user ? (
-                  // User is logged in - show profile menu
+                  // User is logged in - show enhanced profile menu
                   <Menu>
-                    <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="ghost">
+                    <MenuButton 
+                      as={Button} 
+                      rightIcon={<ChevronDownIcon />} 
+                      variant="ghost"
+                      _hover={{
+                        bg: useColorModeValue('gray.100', 'brand.dark.hoverBg'),
+                      }}
+                    >
                       <HStack>
-                        <Avatar size="sm" name={user.name || user.email} />
-                        <Text display={{ base: 'none', md: 'block' }}>
+                        <Avatar 
+                          size="sm" 
+                          name={user.name || user.email}
+                          src={user.avatar}
+                          border="2px solid"
+                          borderColor={useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen')}
+                        />
+                        <Text 
+                          display={{ base: 'none', md: 'block' }}
+                          fontSize="sm"
+                          fontWeight="medium"
+                        >
                           {user.name || 'Profile'}
                         </Text>
                       </HStack>
                     </MenuButton>
-                    <MenuList>
-                      <MenuItem as={Link} to="/profile">
+                    <MenuList
+                      border="1px solid"
+                      borderColor={menuBorderColor}
+                      boxShadow="xl"
+                      bg={menuBg}
+                    >
+                      <Box px={3} py={2}>
+                        <Text fontSize="sm" fontWeight="bold">
+                          {user.name}
+                        </Text>
+                        <Text fontSize="xs" color="gray.500">
+                          {user.email}
+                        </Text>
+                      </Box>
+                      <MenuDivider />
+                      
+                      <MenuItem 
+                        as={Link} 
+                        to="/profile"
+                        icon={<Avatar size="xs" />}
+                        _hover={{ 
+                          bg: useColorModeValue('gray.50', 'brand.dark.hoverBg'),
+                          color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen')
+                        }}
+                      >
                         My Profile
                       </MenuItem>
-                      <MenuItem as={Link} to="/bookings">
+                      
+                      <MenuItem 
+                        as={Link} 
+                        to="/bookings"
+                        icon={<CalendarIcon />}
+                        _hover={{ 
+                          bg: useColorModeValue('gray.50', 'brand.dark.hoverBg'),
+                          color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen')
+                        }}
+                      >
                         My Bookings
                       </MenuItem>
-                      <MenuItem as={Link} to="/settings">
+                      
+                      <MenuItem 
+                        as={Link} 
+                        to="/settings"
+                        icon={<SettingsIcon />}
+                        _hover={{ 
+                          bg: useColorModeValue('gray.50', 'brand.dark.hoverBg'),
+                          color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen')
+                        }}
+                      >
                         Settings
                       </MenuItem>
-                      <MenuItem onClick={handleLogout} color="red.500">
+                      
+                      <MenuDivider />
+                      
+                      <MenuItem 
+                        onClick={handleLogout} 
+                        color="red.500"
+                        _hover={{ 
+                          bg: useColorModeValue('red.50', 'red.900'),
+                          color: 'red.400'
+                        }}
+                      >
                         Logout
                       </MenuItem>
                     </MenuList>
                   </Menu>
                 ) : (
-                  // User is not logged in - show login/signup buttons
-                  <>
+                  // User is not logged in - show enhanced login/signup buttons
+                  <HStack spacing={3}>
                     <Button
-                      variant="primary"
+                      variant="ghost"
                       size="sm"
                       onClick={() => handleAuthClick('login')}
+                      _hover={{
+                        bg: useColorModeValue('gray.100', 'brand.dark.hoverBg'),
+                        transform: 'translateY(-1px)',
+                        color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen'),
+                      }}
                     >
                       Login
                     </Button>
@@ -143,17 +280,31 @@ const Navbar = () => {
                       variant="primary"
                       size="sm"
                       onClick={() => handleAuthClick('signup')}
+                      _hover={{
+                        transform: 'translateY(-2px)',
+                        boxShadow: colorMode === 'dark' 
+                          ? '0 8px 25px rgba(154, 230, 52, 0.4)'
+                          : '0 8px 25px rgba(124, 181, 24, 0.4)',
+                      }}
                     >
                       Sign Up ✨
                     </Button>
-                  </>
+                  </HStack>
                 )}
               </HStack>
             </Flex>
           </Flex>
 
+          {/* Enhanced Mobile Menu */}
           {isOpen ? (
-            <Box pb={4} display={{ md: 'none' }}>
+            <Box 
+              pb={4} 
+              display={{ md: 'none' }}
+              borderTop="1px"
+              borderColor={borderColor}
+              mt={4}
+              pt={4}
+            >
               <Stack as="nav" spacing={4}>
                 {Links.map((link) => (
                   <ChakraLink
@@ -161,6 +312,15 @@ const Navbar = () => {
                     as={Link}
                     to={link.path}
                     onClick={onClose}
+                    px={3}
+                    py={2}
+                    rounded="md"
+                    transition="all 0.2s ease-in-out"
+                    _hover={{
+                      bg: linkHoverBg,
+                      color: linkHoverColor,
+                      transform: 'translateX(4px)',
+                    }}
                   >
                     {link.name}
                   </ChakraLink>
@@ -168,27 +328,69 @@ const Navbar = () => {
                 
                 {/* Mobile Auth Section */}
                 {user ? (
-                  <Stack spacing={2} pt={4} borderTop="1px" borderColor="gray.200">
-                    <Text fontWeight="bold">Welcome, {user.name || user.email}!</Text>
-                    <ChakraLink as={Link} to="/profile" onClick={onClose}>
+                  <Stack spacing={3} pt={4} borderTop="1px" borderColor={borderColor}>
+                    <HStack>
+                      <Avatar 
+                        size="sm" 
+                        name={user.name} 
+                        src={user.avatar}
+                        border="2px solid"
+                        borderColor={useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen')}
+                      />
+                      <Text fontWeight="bold">{user.name}</Text>
+                    </HStack>
+                    <ChakraLink 
+                      as={Link} 
+                      to="/profile" 
+                      onClick={onClose}
+                      _hover={{ 
+                        color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen') 
+                      }}
+                    >
                       My Profile
                     </ChakraLink>
-                    <ChakraLink as={Link} to="/bookings" onClick={onClose}>
+                    <ChakraLink 
+                      as={Link} 
+                      to="/bookings" 
+                      onClick={onClose}
+                      _hover={{ 
+                        color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen') 
+                      }}
+                    >
                       My Bookings
                     </ChakraLink>
-                    <ChakraLink as={Link} to="/settings" onClick={onClose}>
+                    <ChakraLink 
+                      as={Link} 
+                      to="/settings" 
+                      onClick={onClose}
+                      _hover={{ 
+                        color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen') 
+                      }}
+                    >
                       Settings
                     </ChakraLink>
-                    <Button variant="ghost" onClick={handleLogout} color="red.500">
+                    <Button 
+                      variant="ghost" 
+                      onClick={handleLogout} 
+                      color="red.500"
+                      size="sm"
+                      justifyContent="flex-start"
+                      _hover={{ bg: useColorModeValue('red.50', 'red.900') }}
+                    >
                       Logout
                     </Button>
                   </Stack>
                 ) : (
-                  <Stack spacing={2} pt={4} borderTop="1px" borderColor="gray.200">
+                  <Stack spacing={3} pt={4} borderTop="1px" borderColor={borderColor}>
                     <Button
-                      variant="primary"
+                      variant="ghost"
                       size="sm"
                       onClick={() => handleAuthClick('login')}
+                      justifyContent="flex-start"
+                      _hover={{
+                        bg: useColorModeValue('gray.100', 'brand.dark.hoverBg'),
+                        color: useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen'),
+                      }}
                     >
                       Login
                     </Button>
@@ -196,6 +398,7 @@ const Navbar = () => {
                       variant="primary"
                       size="sm"
                       onClick={() => handleAuthClick('signup')}
+                      justifyContent="flex-start"
                     >
                       Sign Up ✨
                     </Button>
