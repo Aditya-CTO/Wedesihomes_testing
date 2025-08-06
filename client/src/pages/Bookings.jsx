@@ -22,12 +22,13 @@ const Bookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Dynamic colors
+  // ✅ ALL HOOKS AT TOP LEVEL - BEFORE ANY CONDITIONAL LOGIC
   const bgColor = useColorModeValue('gray.50', 'gray.900');
   const cardBg = useColorModeValue('white', 'brand.dark.cardBg');
   const textColor = useColorModeValue('brand.navyBlue', 'white');
   const subtextColor = useColorModeValue('gray.600', 'gray.300');
   const borderColor = useColorModeValue('gray.200', 'brand.dark.borderColor');
+  const priceColor = useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen');
 
   // Mock bookings data
   const mockBookings = [
@@ -207,7 +208,7 @@ const Bookings = () => {
                           <Text fontSize="xs" color={subtextColor} fontWeight="medium">
                             TOTAL AMOUNT
                           </Text>
-                          <Text fontSize="sm" fontWeight="bold" color={useColorModeValue('brand.parrotGreen', 'brand.dark.parrotGreen')}>
+                          <Text fontSize="sm" fontWeight="bold" color={priceColor}>
                             {booking.amount}
                           </Text>
                         </VStack>
