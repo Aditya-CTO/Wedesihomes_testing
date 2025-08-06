@@ -10,17 +10,25 @@ import {
   InputGroup,
   InputLeftElement,
   useBreakpointValue,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom'; // ✅ added
+import { useNavigate } from 'react-router-dom';
 
 const MotionBox = motion(Box);
 
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const navigate = useNavigate(); // ✅ added
+  const navigate = useNavigate();
+
+  // 👈 Dark mode support for search container
+  const searchBg = useColorModeValue('white', 'brand.dark.bg.card');
+  const textColor = useColorModeValue('brand.navyBlue', 'white');
+  const inputBg = useColorModeValue('white', 'brand.dark.bg.secondary');
+  const placeholderColor = useColorModeValue('gray.400', 'gray.500');
+  const borderColor = useColorModeValue('gray.200', 'brand.dark.border');
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -35,8 +43,10 @@ const SearchBar = () => {
       transition={{ duration: 0.5 }}
     >
       <Box
-        bg="white"
-        boxShadow="xl"
+        bg={searchBg}
+        boxShadow={useColorModeValue('xl', 'dark-lg')}
+        border="1px solid"
+        borderColor={borderColor}
         borderRadius="full"
         mx="auto"
         maxW="container.md"
@@ -46,7 +56,7 @@ const SearchBar = () => {
         p={{ base: 4, md: 6 }}
       >
         <VStack spacing={4}>
-          <Text fontSize="lg" fontWeight="bold" color="brand.navyBlue">
+          <Text fontSize="lg" fontWeight="bold" color={textColor}>
             🔍 Search your dream accommodation
           </Text>
           <HStack
@@ -56,7 +66,7 @@ const SearchBar = () => {
           >
             <InputGroup flex={1}>
               <InputLeftElement pointerEvents="none">
-                <SearchIcon color="gray.400" />
+                <SearchIcon color={placeholderColor} />
               </InputLeftElement>
               <Input
                 placeholder="Enter city or university name..."
@@ -64,9 +74,13 @@ const SearchBar = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 size="lg"
                 borderRadius="full"
+                bg={inputBg}
+                borderColor={borderColor}
+                color={textColor}
                 focusBorderColor="brand.parrotGreen"
                 _hover={{ borderColor: 'brand.parrotGreen' }}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()} // ✅ enter press
+                _placeholder={{ color: placeholderColor }}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               />
             </InputGroup>
             <Button
@@ -74,7 +88,7 @@ const SearchBar = () => {
               size="lg"
               px={8}
               width={{ base: 'full', md: 'auto' }}
-              onClick={handleSearch} // ✅ search button
+              onClick={handleSearch}
             >
               Search Now
             </Button>
