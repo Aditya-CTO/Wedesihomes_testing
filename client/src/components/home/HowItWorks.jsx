@@ -36,17 +36,23 @@ const steps = [
 ];
 
 const HowItWorks = () => {
-  const bgColor = useColorModeValue('gray.50', 'gray.900');
+  // 👈 Dark mode support - keeps gray.50 in light, dark background in dark
+  const bgColor = useColorModeValue('gray.50', 'brand.dark.bg.primary');
+  const cardBg = useColorModeValue('white', 'brand.dark.bg.card');
+  const headingColor = useColorModeValue('brand.navyBlue', 'white');
+  const textColor = useColorModeValue('gray.600', 'brand.dark.text.secondary');
+  const titleColor = useColorModeValue('brand.navyBlue', 'white');
+  const stepBg = useColorModeValue('brand.lightGreen', 'rgba(124, 181, 24, 0.2)');
 
   return (
     <Box py={20} bg={bgColor}>
       <Container maxW="container.xl">
         <VStack spacing={12}>
           <VStack spacing={4} textAlign="center">
-            <Heading size="2xl" color="brand.navyBlue">
+            <Heading size="2xl" color={headingColor}>
               How It Works
             </Heading>
-            <Text fontSize="xl" color="gray.600" maxW="2xl">
+            <Text fontSize="xl" color={textColor} maxW="2xl">
               Finding your perfect student home is as easy as 1-2-3! 🎯
             </Text>
           </VStack>
@@ -60,33 +66,35 @@ const HowItWorks = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <VStack
-                  bg="white"
+                  bg={cardBg}
                   p={8}
                   borderRadius="2xl"
-                  boxShadow="lg"
+                  boxShadow={useColorModeValue('lg', 'dark-lg')}
+                  border="1px solid"
+                  borderColor={useColorModeValue('transparent', 'brand.dark.border')}
                   spacing={4}
                   h="full"
                   transition="all 0.3s"
                   _hover={{
                     transform: 'translateY(-5px)',
-                    boxShadow: 'xl',
+                    boxShadow: useColorModeValue('xl', '2xl'),
                   }}
                 >
                   <Box
-                    bg="brand.lightGreen"
+                    bg={stepBg}
                     p={4}
                     borderRadius="full"
                     fontSize="3xl"
                   >
                     {step.emoji}
                   </Box>
-                  <Text fontSize="2xl" fontWeight="bold" color="brand.navyBlue">
+                  <Text fontSize="2xl" fontWeight="bold" color={titleColor}>
                     Step {index + 1}
                   </Text>
-                  <Text fontSize="xl" fontWeight="semibold" color="brand.navyBlue">
+                  <Text fontSize="xl" fontWeight="semibold" color={titleColor}>
                     {step.title}
                   </Text>
-                  <Text color="gray.600" textAlign="center">
+                  <Text color={textColor} textAlign="center">
                     {step.description}
                   </Text>
                 </VStack>
