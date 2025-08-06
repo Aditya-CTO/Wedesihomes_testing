@@ -14,49 +14,32 @@ const theme = extendTheme({
       lightGreen: '#E8F5E9',
       lightBlue: '#E3F2FD',
       
-      // 🔥 STUNNING DARK MODE COLORS
+      // 🎯 CLEAN DARK MODE - Matching your brand
       dark: {
-        // Primary colors - vibrant and energetic
-        parrotGreen: '#00FF88', // Electric green
-        navyBlue: '#00D4FF',    // Cyber blue
+        // Keep your brand colors, just adjust brightness
+        parrotGreen: '#7CB518',    // Keep the same green
+        navyBlue: '#4A90E2',      // Lighter blue for dark mode
         
-        // Background gradients - multiple layers
+        // Clean dark backgrounds
         bg: {
-          primary: 'linear-gradient(135deg, #0A0A0A 0%, #1A1A2E 25%, #16213E 50%, #0F1419 75%, #000000 100%)',
-          secondary: 'linear-gradient(135deg, #1A1A2E 0%, #16213E 25%, #0F1419 50%, #533483 75%, #7209B7 100%)',
-          accent: 'linear-gradient(135deg, #16213E 0%, #533483 25%, #7209B7 50%, #A663CC 75%, #4FC3F7 100%)',
-          hero: 'linear-gradient(135deg, #000428 0%, #004e92 25%, #7209B7 50%, #A663CC 75%, #4FC3F7 100%)',
+          primary: '#1A1A1A',      // Clean dark background
+          secondary: '#2D2D2D',    // Slightly lighter for sections
+          navy: '#001F54',         // Your original navy for accent sections
+          card: '#2A2A2A',         // Card background
         },
         
-        // Card backgrounds - glass morphism effect
-        cardBg: 'rgba(26, 26, 46, 0.95)',
-        glassCard: 'rgba(22, 33, 62, 0.85)',
-        premiumCard: 'rgba(83, 52, 131, 0.75)',
+        // Simple borders and accents
+        border: '#404040',
+        borderLight: '#505050',
+        hover: '#353535',
+        active: '#404040',
         
-        // Border and accent colors
-        border: 'rgba(0, 212, 255, 0.2)',
-        borderGlow: 'rgba(0, 255, 136, 0.3)',
-        accentBorder: 'rgba(166, 99, 204, 0.4)',
-        
-        // Text colors
+        // Clean text colors
         text: {
           primary: '#FFFFFF',
-          secondary: '#E0E6ED',
-          accent: '#00FF88',
-          muted: '#9CA3AF',
-          glow: '#4FC3F7',
-        },
-        
-        // Interactive colors
-        hover: 'rgba(0, 255, 136, 0.1)',
-        active: 'rgba(0, 212, 255, 0.15)',
-        focus: 'rgba(166, 99, 204, 0.2)',
-        
-        // Status colors
-        success: '#00FF88',
-        warning: '#FFD700',
-        error: '#FF6B6B',
-        info: '#4FC3F7',
+          secondary: '#E5E5E5',
+          muted: '#A0A0A0',
+        }
       }
     }
   },
@@ -67,40 +50,14 @@ const theme = extendTheme({
   styles: {
     global: (props) => ({
       body: {
-        bg: props.colorMode === 'dark' 
-          ? 'brand.dark.bg.primary'
-          : 'white',
+        bg: props.colorMode === 'dark' ? 'brand.dark.bg.primary' : 'white',
         color: props.colorMode === 'dark' ? 'brand.dark.text.primary' : 'brand.navyBlue',
-        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'all 0.3s ease-in-out',
         minHeight: '100vh',
-        position: 'relative',
-        '&::before': props.colorMode === 'dark' ? {
-          content: '""',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'radial-gradient(circle at 20% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(79, 195, 247, 0.1) 0%, transparent 50%)',
-          pointerEvents: 'none',
-          zIndex: -1,
-        } : {},
       },
       '*': {
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-        scrollBehavior: 'smooth',
+        transition: 'background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out',
       },
-      // Custom scrollbar for dark mode
-      '::-webkit-scrollbar': props.colorMode === 'dark' ? {
-        width: '8px',
-      } : {},
-      '::-webkit-scrollbar-track': props.colorMode === 'dark' ? {
-        background: 'rgba(26, 26, 46, 0.5)',
-      } : {},
-      '::-webkit-scrollbar-thumb': props.colorMode === 'dark' ? {
-        background: 'linear-gradient(45deg, #00FF88, #4FC3F7)',
-        borderRadius: '10px',
-      } : {},
     }),
   },
   components: {
@@ -108,62 +65,41 @@ const theme = extendTheme({
       baseStyle: {
         fontWeight: 'bold',
         borderRadius: 'full',
-        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-        position: 'relative',
-        overflow: 'hidden',
+        transition: 'all 0.3s ease',
       },
       variants: {
         primary: (props) => ({
-          bg: props.colorMode === 'dark' 
-            ? 'linear-gradient(135deg, #00FF88 0%, #4FC3F7 100%)'
-            : 'brand.parrotGreen',
-          color: props.colorMode === 'dark' ? 'black' : 'white',
-          fontWeight: 'bold',
-          _before: props.colorMode === 'dark' ? {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: '-100%',
-            width: '100%',
-            height: '100%',
-            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
-            transition: 'left 0.6s',
-          } : {},
+          bg: props.colorMode === 'dark' ? 'brand.parrotGreen' : 'brand.parrotGreen',
+          color: props.colorMode === 'dark' ? 'white' : 'white',
           _hover: {
-            bg: props.colorMode === 'dark' 
-              ? 'linear-gradient(135deg, #00E075 0%, #3BB8E8 100%)'
-              : '#6BA414',
-            transform: 'translateY(-3px) scale(1.02)',
-            boxShadow: props.colorMode === 'dark'
-              ? '0 20px 40px rgba(0, 255, 136, 0.3), 0 0 0 1px rgba(0, 255, 136, 0.5)'
-              : '0 20px 40px rgba(124, 181, 24, 0.4)',
-            _before: props.colorMode === 'dark' ? {
-              left: '100%',
-            } : {},
+            bg: props.colorMode === 'dark' ? '#6BA414' : '#6BA414',
+            transform: 'translateY(-2px)',
+            boxShadow: 'lg',
           },
           _active: {
-            transform: 'translateY(-1px) scale(1.01)',
+            transform: 'translateY(0)',
+          },
+        }),
+        secondary: (props) => ({
+          bg: props.colorMode === 'dark' ? 'brand.dark.navyBlue' : 'brand.navyBlue',
+          color: 'white',
+          _hover: {
+            bg: props.colorMode === 'dark' ? '#5BA0F2' : '#001A47',
+            transform: 'translateY(-2px)',
+            boxShadow: 'lg',
           },
         }),
         outline: (props) => ({
-          borderColor: props.colorMode === 'dark' ? 'brand.dark.border' : 'brand.parrotGreen',
-          color: props.colorMode === 'dark' ? 'brand.dark.accent' : 'brand.parrotGreen',
-          borderWidth: '2px',
+          borderColor: props.colorMode === 'dark' ? 'brand.parrotGreen' : 'brand.parrotGreen',
+          color: props.colorMode === 'dark' ? 'brand.parrotGreen' : 'brand.parrotGreen',
           _hover: {
-            bg: props.colorMode === 'dark' 
-              ? 'brand.dark.hover'
-              : 'brand.lightGreen',
-            borderColor: props.colorMode === 'dark' ? 'brand.dark.borderGlow' : 'brand.parrotGreen',
-            transform: 'translateY(-2px)',
-            boxShadow: props.colorMode === 'dark'
-              ? '0 10px 20px rgba(0, 255, 136, 0.2)'
-              : '0 10px 20px rgba(124, 181, 24, 0.2)',
+            bg: props.colorMode === 'dark' ? 'brand.dark.hover' : 'brand.lightGreen',
+            transform: 'translateY(-1px)',
           },
         }),
         ghost: (props) => ({
           _hover: {
             bg: props.colorMode === 'dark' ? 'brand.dark.hover' : 'gray.100',
-            color: props.colorMode === 'dark' ? 'brand.dark.accent' : 'brand.parrotGreen',
           },
         }),
       }
@@ -172,43 +108,38 @@ const theme = extendTheme({
     Box: {
       variants: {
         card: (props) => ({
-          bg: props.colorMode === 'dark' ? 'brand.dark.cardBg' : 'white',
-          border: '1px solid',
+          bg: props.colorMode === 'dark' ? 'brand.dark.bg.card' : 'white',
           borderColor: props.colorMode === 'dark' ? 'brand.dark.border' : 'gray.200',
-          backdropFilter: props.colorMode === 'dark' ? 'blur(20px)' : 'none',
           boxShadow: props.colorMode === 'dark' 
-            ? '0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 255, 136, 0.1)'
-            : '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+            ? '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1)'
+            : '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
           _hover: {
-            transform: 'translateY(-5px)',
             boxShadow: props.colorMode === 'dark'
-              ? '0 35px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 255, 136, 0.3), 0 0 30px rgba(79, 195, 247, 0.1)'
-              : '0 25px 30px -5px rgba(0, 0, 0, 0.15)',
+              ? '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2)'
+              : '0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08)',
           },
         }),
-        glassCard: (props) => props.colorMode === 'dark' ? {
-          bg: 'brand.dark.glassCard',
-          backdropFilter: 'blur(30px)',
-          border: '1px solid',
-          borderColor: 'brand.dark.borderGlow',
-          boxShadow: '0 25px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-          _hover: {
-            bg: 'brand.dark.premiumCard',
-            borderColor: 'brand.dark.accentBorder',
-            boxShadow: '0 35px 70px rgba(0, 0, 0, 0.8), 0 0 50px rgba(166, 99, 204, 0.2)',
-          },
-        } : {
-          bg: 'white',
-          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-        },
+        section: (props) => ({
+          bg: props.colorMode === 'dark' ? 'brand.dark.bg.secondary' : 'white',
+        }),
+        navySection: (props) => ({
+          bg: props.colorMode === 'dark' ? 'brand.dark.bg.navy' : 'brand.navyBlue',
+        }),
       }
     },
 
     Heading: {
       baseStyle: (props) => ({
         color: props.colorMode === 'dark' ? 'brand.dark.text.primary' : 'brand.navyBlue',
-        textShadow: props.colorMode === 'dark' ? '0 0 30px rgba(79, 195, 247, 0.3)' : 'none',
       }),
+      variants: {
+        navy: (props) => ({
+          color: props.colorMode === 'dark' ? 'brand.dark.navyBlue' : 'brand.navyBlue',
+        }),
+        accent: (props) => ({
+          color: props.colorMode === 'dark' ? 'brand.parrotGreen' : 'brand.parrotGreen',
+        }),
+      }
     },
 
     Text: {
@@ -216,10 +147,11 @@ const theme = extendTheme({
         body: (props) => ({
           color: props.colorMode === 'dark' ? 'brand.dark.text.secondary' : 'gray.600',
         }),
+        muted: (props) => ({
+          color: props.colorMode === 'dark' ? 'brand.dark.text.muted' : 'gray.500',
+        }),
         accent: (props) => ({
-          color: props.colorMode === 'dark' ? 'brand.dark.accent' : 'brand.parrotGreen',
-          fontWeight: 'medium',
-          textShadow: props.colorMode === 'dark' ? '0 0 20px rgba(0, 255, 136, 0.3)' : 'none',
+          color: props.colorMode === 'dark' ? 'brand.parrotGreen' : 'brand.parrotGreen',
         }),
       }
     },
@@ -227,17 +159,12 @@ const theme = extendTheme({
     Badge: {
       variants: {
         solid: (props) => ({
-          bg: props.colorMode === 'dark' 
-            ? 'linear-gradient(135deg, #00FF88, #4FC3F7)'
-            : 'brand.parrotGreen',
-          color: props.colorMode === 'dark' ? 'black' : 'white',
-          fontWeight: 'bold',
+          bg: props.colorMode === 'dark' ? 'brand.parrotGreen' : 'brand.parrotGreen',
+          color: 'white',
         }),
         subtle: (props) => ({
           bg: props.colorMode === 'dark' ? 'brand.dark.hover' : 'brand.lightGreen',
-          color: props.colorMode === 'dark' ? 'brand.dark.accent' : 'brand.parrotGreen',
-          border: '1px solid',
-          borderColor: props.colorMode === 'dark' ? 'brand.dark.border' : 'transparent',
+          color: props.colorMode === 'dark' ? 'brand.parrotGreen' : 'brand.parrotGreen',
         }),
       }
     },
@@ -247,17 +174,55 @@ const theme = extendTheme({
         outline: (props) => ({
           field: {
             borderColor: props.colorMode === 'dark' ? 'brand.dark.border' : 'gray.200',
-            bg: props.colorMode === 'dark' ? 'brand.dark.cardBg' : 'white',
+            bg: props.colorMode === 'dark' ? 'brand.dark.bg.card' : 'white',
             color: props.colorMode === 'dark' ? 'brand.dark.text.primary' : 'brand.navyBlue',
-            backdropFilter: props.colorMode === 'dark' ? 'blur(10px)' : 'none',
             _hover: {
-              borderColor: props.colorMode === 'dark' ? 'brand.dark.borderGlow' : 'brand.parrotGreen',
+              borderColor: props.colorMode === 'dark' ? 'brand.dark.borderLight' : 'brand.parrotGreen',
             },
             _focus: {
-              borderColor: props.colorMode === 'dark' ? 'brand.dark.accent' : 'brand.parrotGreen',
-              boxShadow: props.colorMode === 'dark' 
-                ? '0 0 0 1px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.2)'
-                : `0 0 0 1px #7CB518`,
+              borderColor: props.colorMode === 'dark' ? 'brand.parrotGreen' : 'brand.parrotGreen',
+              boxShadow: `0 0 0 1px ${props.colorMode === 'dark' ? '#7CB518' : '#7CB518'}`,
+            },
+          },
+        }),
+        filled: (props) => ({
+          field: {
+            bg: props.colorMode === 'dark' ? 'brand.dark.bg.secondary' : 'gray.100',
+            color: props.colorMode === 'dark' ? 'brand.dark.text.primary' : 'brand.navyBlue',
+            _hover: {
+              bg: props.colorMode === 'dark' ? 'brand.dark.hover' : 'gray.200',
+            },
+          },
+        }),
+      },
+    },
+
+    Textarea: {
+      variants: {
+        outline: (props) => ({
+          borderColor: props.colorMode === 'dark' ? 'brand.dark.border' : 'gray.200',
+          bg: props.colorMode === 'dark' ? 'brand.dark.bg.card' : 'white',
+          color: props.colorMode === 'dark' ? 'brand.dark.text.primary' : 'brand.navyBlue',
+          _hover: {
+            borderColor: props.colorMode === 'dark' ? 'brand.dark.borderLight' : 'brand.parrotGreen',
+          },
+          _focus: {
+            borderColor: props.colorMode === 'dark' ? 'brand.parrotGreen' : 'brand.parrotGreen',
+            boxShadow: `0 0 0 1px ${props.colorMode === 'dark' ? '#7CB518' : '#7CB518'}`,
+          },
+        }),
+      },
+    },
+
+    Select: {
+      variants: {
+        outline: (props) => ({
+          field: {
+            borderColor: props.colorMode === 'dark' ? 'brand.dark.border' : 'gray.200',
+            bg: props.colorMode === 'dark' ? 'brand.dark.bg.card' : 'white',
+            color: props.colorMode === 'dark' ? 'brand.dark.text.primary' : 'brand.navyBlue',
+            _hover: {
+              borderColor: props.colorMode === 'dark' ? 'brand.dark.borderLight' : 'brand.parrotGreen',
             },
           },
         }),
@@ -267,19 +232,12 @@ const theme = extendTheme({
     Modal: {
       baseStyle: (props) => ({
         dialog: {
-          bg: props.colorMode === 'dark' ? 'brand.dark.cardBg' : 'white',
-          backdropFilter: props.colorMode === 'dark' ? 'blur(30px)' : 'none',
-          border: '1px solid',
+          bg: props.colorMode === 'dark' ? 'brand.dark.bg.card' : 'white',
+          color: props.colorMode === 'dark' ? 'brand.dark.text.primary' : 'brand.navyBlue',
           borderColor: props.colorMode === 'dark' ? 'brand.dark.border' : 'transparent',
-          boxShadow: props.colorMode === 'dark'
-            ? '0 50px 100px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 255, 136, 0.1)'
-            : '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
         },
         overlay: {
-          bg: props.colorMode === 'dark' 
-            ? 'rgba(0, 0, 0, 0.8)' 
-            : 'blackAlpha.600',
-          backdropFilter: 'blur(10px)',
+          bg: props.colorMode === 'dark' ? 'blackAlpha.800' : 'blackAlpha.600',
         },
       }),
     },
@@ -287,22 +245,20 @@ const theme = extendTheme({
     Menu: {
       baseStyle: (props) => ({
         list: {
-          bg: props.colorMode === 'dark' ? 'brand.dark.cardBg' : 'white',
-          border: '1px solid',
+          bg: props.colorMode === 'dark' ? 'brand.dark.bg.card' : 'white',
           borderColor: props.colorMode === 'dark' ? 'brand.dark.border' : 'gray.200',
-          backdropFilter: props.colorMode === 'dark' ? 'blur(20px)' : 'none',
           boxShadow: props.colorMode === 'dark'
-            ? '0 25px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 255, 136, 0.1)'
-            : '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+            ? '0 10px 15px -3px rgba(0, 0, 0, 0.3)'
+            : '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
         },
         item: {
           bg: 'transparent',
           _hover: {
             bg: props.colorMode === 'dark' ? 'brand.dark.hover' : 'gray.100',
-            color: props.colorMode === 'dark' ? 'brand.dark.accent' : 'brand.parrotGreen',
+            color: props.colorMode === 'dark' ? 'brand.parrotGreen' : 'brand.parrotGreen',
           },
           _focus: {
-            bg: props.colorMode === 'dark' ? 'brand.dark.active' : 'gray.100',
+            bg: props.colorMode === 'dark' ? 'brand.dark.hover' : 'gray.100',
           },
         },
       }),
@@ -311,9 +267,7 @@ const theme = extendTheme({
     Progress: {
       baseStyle: (props) => ({
         filledTrack: {
-          bg: props.colorMode === 'dark'
-            ? 'linear-gradient(90deg, #00FF88, #4FC3F7)'
-            : 'brand.parrotGreen',
+          bg: props.colorMode === 'dark' ? 'brand.parrotGreen' : 'brand.parrotGreen',
         },
         track: {
           bg: props.colorMode === 'dark' ? 'brand.dark.hover' : 'gray.200',
@@ -324,8 +278,22 @@ const theme = extendTheme({
     Divider: {
       baseStyle: (props) => ({
         borderColor: props.colorMode === 'dark' ? 'brand.dark.border' : 'gray.200',
-        opacity: props.colorMode === 'dark' ? 0.3 : 1,
       }),
+    },
+
+    // Special variants for your sections
+    Container: {
+      variants: {
+        hero: (props) => ({
+          bg: props.colorMode === 'dark' ? 'brand.dark.bg.primary' : 'transparent',
+        }),
+        stats: (props) => ({
+          bg: props.colorMode === 'dark' ? 'brand.dark.bg.navy' : 'brand.navyBlue',
+        }),
+        featured: (props) => ({
+          bg: props.colorMode === 'dark' ? 'brand.dark.bg.secondary' : 'gray.50',
+        }),
+      }
     },
   },
 });
