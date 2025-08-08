@@ -56,7 +56,7 @@ const Navbar = () => {
   //);
 
   //'brand.navyBlue'
-  const navBg = useColorModeValue('rgba(255, 255, 255, 0.95)', 'brand.dark.bg.navy');
+  const navBg = useColorModeValue('white', 'brand.dark.bg.navy');
   
   const borderColor = useColorModeValue('gray.100', 'brand.dark.borderColor');
   const linkHoverBg = useColorModeValue('brand.lightGreen', 'brand.dark.lightGreen');
