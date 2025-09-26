@@ -172,48 +172,64 @@ const Reviews = () => {
   };
 
   const handleSubmitReview = async () => {
-    try {
-      if (!newReview.property || !newReview.title || !newReview.review || !newReview.name || !newReview.email) {
-        toast({
-          title: 'Missing Information',
-          description: 'Please fill in all required fields.',
-          status: 'warning',
-          duration: 3000,
-          isClosable: true,
-        });
-        return;
-      }
-
-      console.log('Submitting review:', newReview);
-      
+  try {
+    if (!newReview.property || !newReview.title || !newReview.review || !newReview.name || !newReview.email) {
       toast({
-        title: 'Review Submitted!',
-        description: 'Thank you for your review. It will be published after verification.',
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      });
-      
-      setNewReview({
-        rating: 5,
-        property: '',
-        title: '',
-        review: '',
-        name: '',
-        email: ''
-      });
-      
-      onClose();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to submit review. Please try again.',
-        status: 'error',
+        title: 'Missing Information',
+        description: 'Please fill in all required fields.',
+        status: 'warning',
         duration: 3000,
         isClosable: true,
       });
+      return;
     }
-  };
+
+    // 👉 Send to backend
+    const res = await fetch('/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newReview),
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to save review');
+    }
+
+    const data = await res.json();
+
+    // Update reviews list in UI
+    setReviews(prev => [data.data, ...prev]);
+
+    toast({
+      title: 'Review Submitted!',
+      description: 'Thank you for your review. It will be published after verification.',
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    });
+
+    // Reset form
+    setNewReview({
+      rating: 5,
+      property: '',
+      title: '',
+      review: '',
+      name: '',
+      email: ''
+    });
+
+    onClose();
+  } catch (error) {
+    toast({
+      title: 'Error',
+      description: error.message || 'Failed to submit review. Please try again.',
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    });
+  }
+};
+
 
   const renderStars = (rating, size = "16px") => {
     return Array(5).fill(0).map((_, index) => (
