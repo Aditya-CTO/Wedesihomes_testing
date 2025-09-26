@@ -12,6 +12,9 @@ const propertyRoutes = require('./routes/property.routes');
 const cityRoutes = require('./routes/city.routes');
 const messageRoutes = require('./routes/message.routes');
 
+//for review page
+const reviewRoutes = require('./routes/review.routes');
+
 // Import middleware
 const errorMiddleware = require('./middleware/error.middleware');
 
@@ -46,6 +49,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/properties', propertyRoutes);
 app.use('/api/cities', cityRoutes);
 app.use('/api/messages', messageRoutes);
+
+//for review page
+app.use('/api/reviews', reviewRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
